@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using System.Speech.Recognition;
 using System.Speech.Synthesis;
@@ -37,6 +33,7 @@ namespace SMastermind
             { InternalColor.Orange, Color.Orange },
             { InternalColor.Purple, Color.Purple }
         };
+
         private System.Speech.Recognition.SpeechRecognitionEngine _recognizer =
            new SpeechRecognitionEngine();
         private SpeechSynthesizer synth = new SpeechSynthesizer();
@@ -237,7 +234,7 @@ namespace SMastermind
             GrammarBuilder choiceBuild = new GrammarBuilder(new SemanticResultKey("int", siNoAnswer));
 
             Grammar grammar = new Grammar(new Choices(ponerFicha, enviar, borrar, hacerTrampas, ocultarTrampas, salir, choiceBuild));
-            grammar.Name = "(Poner/Agregar ficha/bola <color>) / (Borrar/Quitar) / (Enviar) / (Hacer Trampas) / (Ocultar Trampas) / (Sí/No) / (Salir)";
+            grammar.Name = "(Poner/Agregar ficha/bola <color>) / (Decir Combinación <N>) / (Borrar/Quitar) / (Enviar) / (Hacer Trampas) / (Ocultar Trampas) / (Sí/No) / (Salir)";
 
             return grammar;
         }
