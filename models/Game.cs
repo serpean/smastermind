@@ -7,7 +7,7 @@ namespace SMastermind.models
 {
     class Game
     {
-        private static int ROUNDS = 10;
+        public static int ROUNDS = 10;
         private Result[] results;
         private int currentAttempt;
         private SecretCombination secretCombination;
@@ -28,12 +28,12 @@ namespace SMastermind.models
 
         public bool IsLooser()
         {
-            return currentAttempt >= ROUNDS;
+            return currentAttempt >= ROUNDS && !IsWinner();
         }
 
         public bool IsWinner()
         {
-            return currentAttempt < ROUNDS && currentAttempt > 0 && LastResult().match();
+            return currentAttempt <= ROUNDS && currentAttempt > 0 && LastResult().match();
         }
 
         private Result LastResult()

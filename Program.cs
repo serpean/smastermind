@@ -16,7 +16,7 @@ namespace SMastermind
             Application.SetCompatibleTextRenderingDefault(false);
             try
             {
-                Application.Run(new Form1());
+                Application.Run(new Mastermind());
             }
             catch(Exception ex)
             {

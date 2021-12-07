@@ -37,6 +37,22 @@ namespace SMastermind.models
             return false;
         }
 
+        public Error IsInvalid()
+        {
+            if (!IsComplete())
+            {
+                return Error.LengthInvalid;
+            }
+            foreach (var number in colors.GroupBy(x => x))
+            {
+                if (number.Count() > 1)
+                {
+                    return Error.ColorTwice;
+                }
+            }
+            return Error.NullError;
+        }
+
         public bool IsComplete()
         {
             return currentPos == LENGTH;
@@ -47,5 +63,12 @@ namespace SMastermind.models
             return new ProposeCombination(this.getColors());
         }
 
+    }
+
+    public enum Error
+    {
+        NullError,
+        LengthInvalid,
+        ColorTwice
     }
 }
