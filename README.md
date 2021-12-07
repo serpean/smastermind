@@ -2,6 +2,8 @@
 
 [Mastermind](https://en.wikipedia.org/wiki/Mastermind_(board_game)) game implementation in C# with SAPI (Speech API) reconigtion tool.
 
+<img src="images/image1.png" height="280">
+
 Grammar:
 * (Poner/Agregar) (bola/ficha) (C [Rojo, Azul, Verde, Amarillo, Naranja, Lila])
 * (Borrar/Quitar)
@@ -13,4 +15,4 @@ Grammar:
 
 ## References
 * [Speech API](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ms723627(v=vs.85))
-* [Drawing API] (https://docs.microsoft.com/es-es/dotnet/api/system.drawing?view=net-6.0)
+* [Drawing API](https://docs.microsoft.com/es-es/dotnet/api/system.drawing?view=net-6.0)
