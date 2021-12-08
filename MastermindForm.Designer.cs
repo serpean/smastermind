@@ -28,6 +28,7 @@ namespace SMastermind
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Mastermind));
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -61,20 +62,22 @@ namespace SMastermind
             this.label3.ForeColor = System.Drawing.Color.Red;
             this.label3.Location = new System.Drawing.Point(21, 20);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(301, 19);
+            this.label3.Size = new System.Drawing.Size(0, 19);
             this.label3.TabIndex = 2;
-            this.label3.Text = "";
             this.label3.Visible = false;
             // 
             // Mastermind
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle; 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.Color.Beige;
-            this.ClientSize = new System.Drawing.Size(334, 762);
+            this.ClientSize = new System.Drawing.Size(334, 900);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Mastermind";
             this.Text = "Mastermind";

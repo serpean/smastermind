@@ -75,7 +75,7 @@ namespace SMastermind
             string rawText = e.Result.Text;
             Console.WriteLine(rawText);
 
-            if ("Salir".Equals(rawText))
+            if ("Quiero salir".Equals(rawText))
             {
                 Application.Exit();
             }
@@ -228,12 +228,12 @@ namespace SMastermind
             GrammarBuilder borrar = new GrammarBuilder(new Choices(new string[] { "Borrar", "Quitar" }));
             GrammarBuilder hacerTrampas = new GrammarBuilder("Hacer trampas");
             GrammarBuilder ocultarTrampas = new GrammarBuilder("Ocultar trampas");
-            GrammarBuilder salir = new GrammarBuilder("Salir");
+            GrammarBuilder salir = new GrammarBuilder("Quiero salir");
 
             Choices siNoAnswer = new Choices(new string[] { "Si", "No" });
             GrammarBuilder choiceBuild = new GrammarBuilder(new SemanticResultKey("int", siNoAnswer));
 
-            Grammar grammar = new Grammar(new Choices(ponerFicha, enviar, borrar, hacerTrampas, ocultarTrampas, salir, choiceBuild));
+            Grammar grammar = new Grammar(new Choices(ponerFicha, enviar, borrar, salir, hacerTrampas, ocultarTrampas, choiceBuild));
             grammar.Name = "(Poner/Agregar ficha/bola <color>) / (Decir Combinación <N>) / (Borrar/Quitar) / (Enviar) / (Hacer Trampas) / (Ocultar Trampas) / (Sí/No) / (Salir)";
 
             return grammar;
