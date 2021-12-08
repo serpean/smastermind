@@ -11,7 +11,6 @@ namespace SMastermind.models
         {
             Color[] colors = new Color[Combination.LENGTH];
             // Generate Combination.LENGTH differentes ints.
-            Random randomGenerator = new Random();
             Array allColors = Enum.GetValues(typeof(Color));
             int[] randoms = GenerateRandoms(Combination.LENGTH, 0, allColors.Length);
             for (int i = 0; i < colors.Length; i++)

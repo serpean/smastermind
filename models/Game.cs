@@ -8,10 +8,10 @@ namespace SMastermind.models
     class Game
     {
         public static int ROUNDS = 10;
-        private Result[] results;
+        private readonly Result[] results;
         private int currentAttempt;
-        private SecretCombination secretCombination;
-        private ProposeCombination[] proposeCombinations;
+        private readonly SecretCombination secretCombination;
+        private readonly ProposeCombination[] proposeCombinations;
 
         public Game()
         {
@@ -21,7 +21,7 @@ namespace SMastermind.models
             proposeCombinations = new ProposeCombination[ROUNDS];
         }
 
-        public SecretCombination getSecretCombination()
+        public SecretCombination GetSecretCombination()
         {
             return this.secretCombination;
         }
@@ -33,7 +33,7 @@ namespace SMastermind.models
 
         public bool IsWinner()
         {
-            return currentAttempt <= ROUNDS && currentAttempt > 0 && LastResult().match();
+            return currentAttempt <= ROUNDS && currentAttempt > 0 && LastResult().Match();
         }
 
         private Result LastResult()
@@ -59,7 +59,7 @@ namespace SMastermind.models
         public void AddProposeCombination(ProposeCombination proposeCombination)
         {
             proposeCombinations[currentAttempt] = proposeCombination;
-            results[currentAttempt] = new Result(this.secretCombination.getBlacks(proposeCombination), this.secretCombination.getWhites(proposeCombination));
+            results[currentAttempt] = new Result(this.secretCombination.GetBlacks(proposeCombination), this.secretCombination.GetWhites(proposeCombination));
             currentAttempt++;
         }
     }

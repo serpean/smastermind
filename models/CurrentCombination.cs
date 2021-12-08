@@ -7,7 +7,7 @@ namespace SMastermind.models
 {
     class CurrentCombination : Combination
     {
-        private int currentPos { get; set; }
+        private int currentPos;
         public CurrentCombination()
         {
             this.colors = new Color[LENGTH];
@@ -60,7 +60,7 @@ namespace SMastermind.models
 
         public ProposeCombination ToProposeCombination()
         {
-            return new ProposeCombination(this.getColors());
+            return new ProposeCombination(this.GetColors());
         }
 
     }

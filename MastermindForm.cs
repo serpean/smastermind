@@ -34,9 +34,9 @@ namespace SMastermind
             { InternalColor.Purple, Color.Purple }
         };
 
-        private System.Speech.Recognition.SpeechRecognitionEngine _recognizer =
+        private readonly System.Speech.Recognition.SpeechRecognitionEngine _recognizer =
            new SpeechRecognitionEngine();
-        private SpeechSynthesizer synth = new SpeechSynthesizer();
+        private readonly SpeechSynthesizer synth = new SpeechSynthesizer();
         private Game game;
         private CurrentCombination currentCombination;
         private bool cheating;
@@ -63,12 +63,12 @@ namespace SMastermind
             _recognizer.UpdateRecognizerSetting("CFGConfidenceRejectionThreshold", 50);
             grammar.Enabled = true;
             _recognizer.LoadGrammar(grammar);
-            _recognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(_recognizer_SpeechRecognized);
+            _recognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(Recognizer_SpeechRecognized);
             //reconocimiento asíncrono y múltiples veces
             _recognizer.RecognizeAsync(RecognizeMode.Multiple);
         }
 
-        void _recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        void Recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             SemanticValue semantics = e.Result.Semantics;
 
@@ -82,7 +82,7 @@ namespace SMastermind
 
             if (isGameEnd)
             {
-                AskForPlayAgain(rawText, semantics);
+                AskForPlayAgain(semantics);
             } else
             {
                 Play(rawText, semantics);
@@ -95,9 +95,9 @@ namespace SMastermind
         /// Ask For Play Again Stage:
         /// Use (Si/No) gramar to play again or close the game
         /// </summary>
-        /// <param name="rawText"></param>
         /// <param name="semantics"></param>
-        private void AskForPlayAgain(string rawText, SemanticValue semantics)
+        /// 
+        private void AskForPlayAgain(SemanticValue semantics)
         {
 
             if (semantics.ContainsKey("int"))
@@ -211,7 +211,7 @@ namespace SMastermind
         {
             Choices colorChoice = new Choices();
 
-            colorChoice.Add(new SemanticResultValue("Rojo", Color.FromName("Red").ToArgb()).ToGrammarBuilder());
+            colorChoice.Add(new SemanticResultValue("Roja", Color.FromName("Red").ToArgb()).ToGrammarBuilder());
             colorChoice.Add(new SemanticResultValue("Azul", Color.FromName("Blue").ToArgb()).ToGrammarBuilder());
             colorChoice.Add(new SemanticResultValue("Verde", Color.FromName("Green").ToArgb()).ToGrammarBuilder());
             colorChoice.Add(new SemanticResultValue("Amarillo", Color.FromName("Yellow").ToArgb()).ToGrammarBuilder());
@@ -233,8 +233,10 @@ namespace SMastermind
             Choices siNoAnswer = new Choices(new string[] { "Si", "No" });
             GrammarBuilder choiceBuild = new GrammarBuilder(new SemanticResultKey("int", siNoAnswer));
 
-            Grammar grammar = new Grammar(new Choices(ponerFicha, enviar, borrar, salir, hacerTrampas, ocultarTrampas, choiceBuild));
-            grammar.Name = "(Poner/Agregar ficha/bola <color>) / (Decir Combinación <N>) / (Borrar/Quitar) / (Enviar) / (Hacer Trampas) / (Ocultar Trampas) / (Sí/No) / (Salir)";
+            Grammar grammar = new Grammar(new Choices(ponerFicha, enviar, borrar, salir, hacerTrampas, ocultarTrampas, choiceBuild))
+            {
+                Name = "(Poner/Agregar ficha/bola <color>) / (Decir Combinación <N>) / (Borrar/Quitar) / (Enviar) / (Hacer Trampas) / (Ocultar Trampas) / (Sí/No) / (Salir)"
+            };
 
             return grammar;
         }
@@ -254,7 +256,7 @@ namespace SMastermind
                 nextY = PrintCombination(g, currentCombination, 50, nextY, 15)[1];
                 if (cheating)
                 {
-                    PrintCombination(g, game.getSecretCombination(), 50, nextY, 15);
+                    PrintCombination(g, game.GetSecretCombination(), 50, nextY, 15);
                 }
             }
         }
@@ -273,7 +275,7 @@ namespace SMastermind
             Pen myPen = new Pen(Color.Black);
             int currentX = startX;
             int currentY = startY;
-            foreach (InternalColor color in c.getColors())
+            foreach (InternalColor color in c.GetColors())
             {
                 if(InternalColorToColor.TryGetValue(color, out Color fillColor))
                 {
@@ -298,7 +300,7 @@ namespace SMastermind
         /// <param name="startX"></param>
         /// <param name="startY"></param>
         /// <param name="radius"></param>
-        private void PrintBlackAndWhites(Graphics g, Combination c, int startX, int startY, int radius)
+        private void PrintBlackAndWhites(Graphics g, Result result, int startX, int startY, int radius)
         {
             int currentX = startX;
             Pen blackPen = new Pen(Color.Black);
@@ -309,10 +311,8 @@ namespace SMastermind
             int iBlacks = 0;
             int iWhites = 0;
             int iHoles = 0;
-            int blacks = c.getBlacks(game.getSecretCombination());
-            int whites = c.getWhites(game.getSecretCombination());
             while (iBlacks + iWhites + iHoles < Combination.LENGTH){
-                while(iBlacks < blacks)
+                while(iBlacks < result.Blacks)
                 {
                     g.FillCircle(blackBrush, currentX, startY, radius);
                     g.DrawCircle(whitePen, currentX, startY, radius);
@@ -320,7 +320,7 @@ namespace SMastermind
                     iBlacks++;
                     iHoles++;
                 }
-                while (iWhites < whites)
+                while (iWhites < result.Whites)
                 {
                     // print whites
                     g.FillCircle(whiteBrush, currentX, startY, radius);
@@ -355,14 +355,15 @@ namespace SMastermind
             {
                 ProposeCombination curr = game.GetProposeCombinationForIndex(i);
                 int currentX = PrintCombination(g, curr, startX, currentY, radius)[0];
-                PrintBlackAndWhites(g, curr, currentX, currentY, radius / 4);
+                Result result = game.GetResultForIndex(i);
+                PrintBlackAndWhites(g, result, currentX, currentY, radius / 4);
                 currentY = currentY + 2 * radius + radius / 2;
             }
             for (int i = game.GetCurrentAttempt(); i < Game.ROUNDS; i++)
             {
                 Combination emptyCombination = new CurrentCombination();
                 int currentX = PrintCombination(g, emptyCombination, startX, currentY, radius)[0];
-                PrintBlackAndWhites(g, emptyCombination, currentX, currentY, radius / 4);
+                PrintBlackAndWhites(g, new Result(0, 0), currentX, currentY, radius / 4);
                 currentY = currentY + 2 * radius + radius / 2;
             }
             return currentY;

@@ -7,18 +7,18 @@ namespace SMastermind.models
 {
     class Result
     {
-        private int blacks { get; }
-        private int whites { get; }
+        public int Blacks { get; }
+        public int Whites { get; }
 
         public Result(int blacks, int whites)
         {
-            this.blacks = blacks;
-            this.whites = whites;
+            this.Blacks = blacks;
+            this.Whites = whites;
         }
 
-        public bool match()
+        public bool Match()
         {
-            return blacks == Combination.LENGTH;
+            return Blacks == Combination.LENGTH;
         }
     }
 }
